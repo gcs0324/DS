@@ -4,8 +4,7 @@
 #define Posi(T) ListNode<T>*
 
 template <typename T>
-struct ListNode //列表节点模板类(以双向列表形式实现)
-{
+struct ListNode {   //列表节点模板类(以双向列表形式实现)
     T data; //数值
     Posi(T) pred;   //后继
     Posi(T) succ;   //前驱
@@ -26,5 +25,13 @@ Posi(T) ListNode<T>::insertAsPred(T const& e) {
    pred->succ = x;
    pred = x;
    return x;
+}
+
+template <typename T>
+Posi(T) ListNode<T>::insertAsSucc(T const& e) {
+    Posi(T) x = new ListNode(e, this, succ);
+    succ->pred = x;
+    succ = x;
+    return x;
 }
 #endif

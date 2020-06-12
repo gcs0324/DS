@@ -11,6 +11,7 @@ private:
     Posi(T) trailer;
 protected:
     void init();
+    void copyNodes(Posi(T) p, int n);
 public:
     /*----------------------只读访问接口--------------------*/
     T& operator[](Rank r) const;
@@ -20,11 +21,16 @@ public:
     Posi(T) last() const {
         return trailer->pred;
     }
-
+    /* 查找 */
     Posi(T) find(T const& e, int n, Posi(T) p) const;
     
     /*----------------------可写访问接口--------------------*/
-    
+    /* 复制 */
+    void copyNodes(Posi(T) p, int n);
+    /* 插入 */
+    Posi(T) insertAsLast(T const& e);
+    /* 删除 */
+    T remove(Posi(T) p);
 
 };
 
@@ -57,4 +63,28 @@ Posi(T) List<T>::find(T const& e, int n, Posi(T) p) const{  //顺序查找，O(n
     return NULL;    //左越界
 }
 
+template <typename T>
+void List<T>::copyNodes(Posi(T) p, int n) {
+    init();
+    while(n--) {
+        insertAsLast(p->data);
+        p=p->succ;    
+    }
+}
+
+template <typename T>
+Posi(T) List<T>::insertAsLast(T const& e) {
+    _size++;
+    trailer->insertAsPred(e);
+}
+
+template <typename T>
+T List<T>::remove(Posi(T) p) {
+    T e = p->data;
+    p->pred->succ = p->succ;
+    p->succ->pred = p->pred;
+    delete p;
+    _size--;
+    return e;
+}
 #endif
